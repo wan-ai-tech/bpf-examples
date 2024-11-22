@@ -1063,9 +1063,12 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 	}
 
-	if (luaL_dofile(L, sched_file) != LUA_OK) {
-		die(L, "%s", lua_tostring(L, -1));
+	lua_getglobal(L, "load_xdq_file");
+	lua_pushstring(L, sched_file);
+	if (lua_pcall(L, 1, 0, 0) != LUA_OK) {
+			die(L, "%s", lua_tostring(L, -1));
 	}
+
 	free(state->xdq_script);
 	lua_close(L);
 	return EXIT_SUCCESS;
